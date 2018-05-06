@@ -37,7 +37,7 @@ for (var i = 0; i < configarray.length; i++) {
 var pg = require('pg');
 var pool = new pg.Pool(config);
 
-// test the connection:
+// test the connection:		(http://developer.cege.ucl.ac.uk:31099/postgistest)
 	app.get('/postgistest', function (req,res) {
 		console.log('postgistest');
 		pool.connect(function(err,client,done) {
@@ -56,3 +56,9 @@ var pool = new pg.Pool(config);
 			   });
 			});
 	});
+
+// DATA UPLOAD: QUESTIONS
+function startDataUpload() {
+alert ("start data upload");
+}
+
