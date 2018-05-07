@@ -93,18 +93,6 @@ app.get('/',function (req,res) {
 
 
 
-// ADD THE TRACKING FUNCTIONALITY TO THE QUIZ APP 
-
-
-
-
-
-
-
-
-
-
-
 // RETRIEVE THE QUESTIONS FROM THE DATABASE 	
 	
 app.get('/getPOI', function (req,res) {
@@ -118,9 +106,9 @@ app.get('/getPOI', function (req,res) {
         // note that query needs to be a single string with no line breaks so built it up bit by bit
 
         	var querystring = " SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features  FROM ";
-        	querystring = querystring + "(SELECT 'Feature' As type     , ST_AsGeoJSON(lg.geom)::json As geometry, ";
-        	querystring = querystring + "row_to_json((SELECT l FROM (SELECT id, name, category) As l      )) As properties";
-        	querystring = querystring + "   FROM united_kingdom_poi  As lg limit 100  ) As f ";
+        	querystring = querystring + "(SELECT 'Feature' As type     , ST_AsGeoJSON(lg.location)::json As geometry, ";
+        	querystring = querystring + "row_to_json((SELECT l FROM (SELECT id, question, correct, answer1, answer2, answer3) As l      )) As properties";
+        	querystring = querystring + "   FROM questions  As lg limit 100  ) As f ";
         	console.log(querystring);
         	client.query(querystring,function(err,result){
 
