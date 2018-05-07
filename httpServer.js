@@ -10,13 +10,19 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-	// adding functionality to allow cross-domain queries when PhoneGap is running a server
-	app.use(function(req, res, next) {
-		res.setHeader("Access-Control-Allow-Origin", "*");
-		res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
-		res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-		next();
-	});
+// adding functionality to allow cross-domain queries when PhoneGap is running a server
+app.use(function(req, res, next) {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Headers", "X-Requested-With");
+	res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+	next();
+});
+
+
+
+
+
+// UPLOAD THE DATA FROM THE QUESTIONS BROWSER APP FORM:	
 
 app.post('/uploadData',function(req,res){
 	// note that we are using POST here as we are uploading data
@@ -49,42 +55,58 @@ querystring = querystring + req.body.answer1 + "','" + req.body.answer2 + "','" 
 
 });
 	
-	// adding functionality to log the requests
-	app.use(function (req, res, next) {
-		var filename = path.basename(req.url);
-		var extension = path.extname(filename);
-		console.log("The file " + filename + " was requested.");
-		next();
-	});
+// adding functionality to log the requests
+app.use(function (req, res, next) {
+	var filename = path.basename(req.url);
+	var extension = path.extname(filename);
+	console.log("The file " + filename + " was requested.");
+	next();
+});
 	
 
-	// read in the file and force it to be a string by adding “” at the beginning
-	var configtext = ""+fs.readFileSync("/home/studentuser/certs/postGISConnection.js");
+// read in the file and force it to be a string by adding “” at the beginning
+var configtext = ""+fs.readFileSync("/home/studentuser/certs/postGISConnection.js");
 
-	// now convert the configuration file into the correct format -i.e. a name/value pair array
-	var configarray = configtext.split(",");
-	var config = {};
-	for (var i = 0; i < configarray.length; i++) {
-		var split = configarray[i].split(':');
-		config[split[0].trim()] = split[1].trim();
-	}
-	var pg = require('pg');
-	var pool = new pg.Pool(config);
-	console.log(config);
-
-
+// now convert the configuration file into the correct format -i.e. a name/value pair array
+var configarray = configtext.split(",");
+var config = {};
+for (var i = 0; i < configarray.length; i++) {
+	var split = configarray[i].split(':');
+	config[split[0].trim()] = split[1].trim();
+}
+var pg = require('pg');
+var pool = new pg.Pool(config);
+console.log(config);
 	
-	// add an http server to serve files to the Edge browser 
-	// due to certificate issues it rejects the https files if they are not
-	// directly called in a typed URL
-	var http = require('http');
-	var httpServer = http.createServer(app); 
-	httpServer.listen(4480);
+// add an http server to serve files to the Edge browser 
+// due to certificate issues it rejects the https files if they are not
+// directly called in a typed URL
+var http = require('http');
+var httpServer = http.createServer(app); 
+httpServer.listen(4480);
 
-	app.get('/',function (req,res) {
-		res.send("hello world from the HTTP server");
-	});
+app.get('/',function (req,res) {
+	res.send("hello world from the HTTP server");
+});
 
+
+
+
+
+// ADD THE TRACKING FUNCTIONALITY TO THE QUIZ APP 
+
+
+
+
+
+
+
+
+
+
+
+// RETRIEVE THE QUESTIONS FROM THE DATABASE 	
+	
 app.get('/getPOI', function (req,res) {
      pool.connect(function(err,client,done) {
        if(err){
