@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Quiz questions entry </title>
+<!-- the following links add the CSS and Javascript required for the Leaflet Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+ integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
+ crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+ integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
+ crossorigin=""></script>
+ <!-- the following CSS is used to set the size of the Map -->
+ <style type="text/css">
+	#mapid { height: 200px; }
+ </style>
+</head>
+
+<body>
+<h2>Click on the map to select the location of the question topic</h2>
+
+<!-- the mapid div will hold the map -->
+<div id="mapid" style="width: 600px; height: 400px;"></div>
+<!-- the following script will load the map and set the default view and zoom, as well as loading the
+basemap tiles -->
+<script>
+// load the map
+var mymap = L.map('mapid').setView([51.524, -0.134], 15);
+// load the tiles
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+maxZoom: 18,
+attribution: 'Map data &copy; <ahref="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+id: 'mapbox.streets'
+}).addTo(mymap);
+
+// create a popup
+var popup = L.popup();
+// create an event detector to wait for the user's click event
+// !!!!! customise "setContent() 4 lines down with question input fields !!!!!
+function onMapClick(e) {
+popup
+.setLatLng(e.latlng)
+.setContent("Location: " + e.latlng.toString())
+.openOn(mymap);
+//insert coordinates of click event into location field.
+//Code source: https://stackoverflow.com/questions/42709472/insert-leaflet-popup-value-into-form-and-submit
+document.getElementById('location').value =  e.latlng.lat + " " + e.latlng.lng;
+}
+// now add the click event detector to map
+mymap.on('click', onMapClick);
+
+</script>
+
+<h2> Enter your Question here </h2>
+
+<!--create entry form-->
+<div >
+<form>
+<label for="location">Location:  </label><input type="text" size="50" id="location"/><br />
+<label for="question">Question:  </label><input type="text" size="100" id="question"/><br />
+<label for="correct">Correct Answer:  </label><input type="text" size="50" id="correct"/><br />
+<label for="answer1">Answer 1:  </label><input type="text" size="50" id="answer1"/><br />
+<label for="answer2">Answer 2:  </label><input type="text" size="50" id="answer2"/><br />
+<label for="answer3">Answer 3:  </label><input type="text" size="50" id="answer3"/><br />
+
+<button id="startUpload" onclick="startDataUpload()">Submit</button>
+</form>
+</div>
+
+
+<!-- connection to the servers -->
+<!--<script src="quizServer.js"> </script>-->
+<script src="/uploadData.js"> </script>
+
+</body>
+</html>

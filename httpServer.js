@@ -31,11 +31,11 @@ app.post('/uploadData',function(req,res){
 // pull the geometry component together
 // note that well known text requires the points as longitude/latitude !
 // well known text should look like: 'POINT(-71.064544 42.28787)'
-var geometrystring = "st_geomfromtext('POINT(" + req.body.longitude + " " + req.body.latitude + ")'";
+var geometrystring = "st_geomfromtext('POINT(" + req.body.location + ")')";
 
-var querystring = "INSERT into formdata (name,surname,module,language, modulelist, lecturetime, geom) values ('";
-querystring = querystring + req.body.name + "','" + req.body.surname + "','" + req.body.module + "','";
-querystring = querystring + req.body.language + "','" + req.body.modulelist + "','" + req.body.lecturetime+"',"+geometrystring + "))";
+var querystring = "INSERT into questions (question,location,correct,answer1,answer2,answer3) values ('";
+querystring = querystring + req.body.question + "'," + geometrystring + ",'" + req.body.correct + "','";
+querystring = querystring + req.body.answer1 + "','" + req.body.answer2 + "','" + req.body.answer3+ "')";																									
        	console.log(querystring);
        	client.query( querystring,function(err,result) {
           done(); 
@@ -48,7 +48,6 @@ querystring = querystring + req.body.language + "','" + req.body.modulelist + "'
     });
 
 });
-
 	
 	// adding functionality to log the requests
 	app.use(function (req, res, next) {
@@ -62,7 +61,7 @@ querystring = querystring + req.body.language + "','" + req.body.modulelist + "'
 	// read in the file and force it to be a string by adding “” at the beginning
 	var configtext = ""+fs.readFileSync("/home/studentuser/certs/postGISConnection.js");
 
-	// now convert the configruation file into the correct format -i.e. a name/value pair array
+	// now convert the configuration file into the correct format -i.e. a name/value pair array
 	var configarray = configtext.split(",");
 	var config = {};
 	for (var i = 0; i < configarray.length; i++) {
