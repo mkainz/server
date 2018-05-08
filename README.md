@@ -1,4 +1,6 @@
 # ReadMe
+The aim of this project is the creation of two phonegap quiz applications; one browser application to be used to insert geolocated questions into a database, and one mobile device application to track the user’s position and to provide a location-related questions with the functionality to save the user’s reply and ID in another database.
+
 
 ## Getting Started
 Follow these instructions to access and use both applications.
